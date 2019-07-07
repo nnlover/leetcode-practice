@@ -10,6 +10,11 @@
 #.idea/
 .idea/
 
+#.settings/
+.settings/
+#.vscode/
+.vscode/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
