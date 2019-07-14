@@ -3,6 +3,7 @@ package com.multithread;
 /**
  * @Author: wangzongyu
  * @Date: 2019/7/14 22:53
+ * 分析见：如何让多个线程有序执行.md
  */
 public class 按序打印 {
 }
