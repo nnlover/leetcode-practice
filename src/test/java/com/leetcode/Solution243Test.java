@@ -27,7 +27,14 @@ public class Solution243Test {
     public void shortestDistance1() {
         String[] di = new String[]{"a", "a", "b", "b"};
 
-        Assert.assertEquals(1, new Solution243().shortestDistance(di,
+        Assert.assertEquals(1, new Solution245().shortestDistance(di,
                 "a", "b"));
+    }
+    @Test
+    public void shortestDistance3() {
+        String[] di = new String[]{"a", "a", "b", "b"};
+
+        Assert.assertEquals(1, new Solution243().shortestDistance(di,
+                "b", "b"));
     }
 }
