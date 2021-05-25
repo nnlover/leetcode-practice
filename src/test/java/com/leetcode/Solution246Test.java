@@ -25,5 +25,6 @@ public class Solution246Test {
         Assert.assertFalse(new Solution246().isStrobogrammatic("696"));
         Assert.assertTrue(new Solution246().isStrobogrammatic("1"));
         Assert.assertTrue(new Solution246().isStrobogrammatic("1111"));
+        Assert.assertTrue(new Solution246().isStrobogrammatic("116989686911"));
     }
 }

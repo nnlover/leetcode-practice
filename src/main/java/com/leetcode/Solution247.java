@@ -1,9 +1,7 @@
 package com.leetcode;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 class Solution247 {
     /**
@@ -11,21 +9,65 @@ class Solution247 {
      * https://leetcode-cn.com/problems/strobogrammatic-number-ii/
      */
     public List<String> findStrobogrammatic(int n) {
-        return null;
+        List<String> ans = new ArrayList<>();
+        Map<Character, Character> lookupMap = new HashMap<>(6);
+        lookupMap.put('0', '0');
+        lookupMap.put('1', '1');
+        lookupMap.put('6', '9');
+        lookupMap.put('8', '8');
+        lookupMap.put('9', '6');
+        Set<String> existSet = new HashSet<>();
+        doFind(ans, "", "", 0, n, lookupMap, existSet);
+        return ans;
+    }
+
+    public void doFind(List<String> ans, String prefix, String rotate, int index, int deep, Map<Character, Character> lookupMap, Set<String> existSet) {
+        if (index == deep) {
+            if (deep > 1 && prefix.startsWith("0")) {
+                return;
+            }
+            if (prefix.equals(rotate)) {
+                ans.add(prefix);
+                existSet.add(prefix);
+            }
+            return;
+        }
+        if (filter(prefix, deep)) {
+            return;
+        }
+        ++index;
+        for (int i = 0; i < num.length; i++) {
+            if (!existSet.contains(prefix)) {
+                doFind(ans, prefix + num[i], lookupMap.get(num[i]) + rotate, index, deep, lookupMap, existSet);
+            }
+        }
+
+    }
+
+    private boolean filter(String prefix, int deep) {
+        if (prefix.startsWith("0")) {
+            return true;
+        }
+        int mid = deep / 2;
+        if (prefix.length() <= mid || deep < 4) {
+            return false;
+        }
+        if (deep % 2 == 1) {
+            return '6' == prefix.charAt(mid) || '9' == prefix.charAt(mid);
+        } else {
+            //中间只能是 11 69 96 88；
+            String sub = prefix.substring(mid - 1, mid + 1);
+            return !("00".equals(sub) || "11".equals(sub) || "69".equals(sub) || "96".equals(sub) || "88".equals(sub));
+        }
     }
 
 
-    public boolean isStrobogrammatic(String num) {
+    public boolean isStrobogrammatic(String num, Map<Character, Character> lookupMap) {
 
         int r = num.length() - 1;
         char[] rotate = new char[num.length()];
         for (int i = 0; i < num.length(); i++) {
-            int index = look(num.charAt(i));
-            if (index >= 0) {
-                rotate[r--] = lookup[index][1];
-            } else {
-                return false;
-            }
+            rotate[r--] = lookupMap.get(num.charAt(i));
         }
         return String.valueOf(rotate).equals(num);
     }
@@ -38,6 +80,8 @@ class Solution247 {
             {'9', '6'},
     };
 
+    public static char[] num = new char[]{'0', '1', '6', '8', '9'};
+
 
     private int look(char a) {
         for (int i = 0; i < 5; i++) {
@@ -48,21 +92,7 @@ class Solution247 {
         return -1;
     }
 
-    public static char[] num = new char[]{'0', '1', '6', '8', '9'};
     public static String[] numStr = new String[]{"0", "1", "6", "8", "9"};
-
-    private void takeStrobogrammatic(List<String> ans, int rotateCnt) {
-        if (rotateCnt > 0) {
-            return;
-        }
-        for (int i = 0; i < num.length; i++) {
-            String a = String.valueOf(num[i]);
-            for (int j = 0; j < num.length; j++) {
-                String s = a + num[j];
-                ans.add(s);
-            }
-        }
-    }
 
     /**
      * 递归写法的生成长度为 n de 全排列
@@ -115,9 +145,9 @@ class Solution247 {
     public static void main(String[] args) {
 
         ArrayList<String> list = new ArrayList<>();
-        loop(list, "", 0, 3);
+        //loop(list, "", 0, 10);
         System.out.println(list.toString());
-        System.out.println(loop2(2).toString());
+        System.out.println(loop2(12).toString());
     }
 
 }
