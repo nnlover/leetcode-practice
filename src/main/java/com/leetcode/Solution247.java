@@ -7,8 +7,63 @@ class Solution247 {
     /**
      * 注；是将数字旋转180度，或者上下颠倒后一样则是中心对称
      * https://leetcode-cn.com/problems/strobogrammatic-number-ii/
+     * n 为偶数 时，n的结果是  n-2 的结果中间插入 {"00", "11", "69", "96", "88"} 之后的结果
+     * n 为奇数时，n 的结果是 n -1 的结果中间插入 {"0", "1", "8"} 之后的结果
+     * 优化思路 缓存中间结果
+     *
+     *
      */
     public List<String> findStrobogrammatic(int n) {
+        List<String> ans = new ArrayList<>();
+        if (n == 1) {
+            ans.add("0");
+            ans.add("1");
+            ans.add("8");
+        } else if (n == 2) {
+            ans.add("11");
+            ans.add("69");
+            ans.add("96");
+            ans.add("88");
+        } else {
+            ans = doGram(n);
+        }
+        return ans;
+    }
+
+    public static String[] jMid = {"0", "1", "8"};
+    public static String[] oMid = {"00", "11", "69", "96", "88"};
+
+    private List<String> doGram(int n) {
+
+        if (n == 1) {
+            return Arrays.asList("0", "1", "6", "9", "8");
+        }
+        if (n == 2) {
+            return Arrays.asList(oMid);
+        }
+        List<String> n1 = doGram(n % 2 == 0 ? n - 2 : n - 1);
+        List<String> add = Arrays.asList(jMid);
+        if (n % 2 == 0) {
+            add = Arrays.asList(oMid);
+        }
+
+        List<String> ans = new ArrayList<>(n1.size());
+        for (String pre : n1) {
+            if (pre.startsWith("0")) {
+                continue;
+            }
+            int mid = pre.length();
+            for (int j = 0; j < add.size(); j++) {
+                ans.add(pre.substring(0, mid / 2) + add.get(j) + pre.substring(mid / 2));
+            }
+        }
+        return ans;
+    }
+
+    public List<String> findStrobogrammatic1(int n) {
+        /**
+         * 慢
+         */
         List<String> ans = new ArrayList<>();
         Map<Character, Character> lookupMap = new HashMap<>(6);
         lookupMap.put('0', '0');
@@ -143,11 +198,8 @@ class Solution247 {
     }
 
     public static void main(String[] args) {
-
-        ArrayList<String> list = new ArrayList<>();
-        //loop(list, "", 0, 10);
-        System.out.println(list.toString());
-        System.out.println(loop2(12).toString());
+        System.out.println(new Solution247().findStrobogrammatic(6).toString());
+        System.out.println(new Solution247().findStrobogrammatic1(6).toString());
     }
 
 }
